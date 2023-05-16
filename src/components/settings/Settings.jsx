@@ -2,7 +2,8 @@ import React from "react";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 const defaultConfig = {
-  theme: "dark"
+  lang: 'es',
+  theme: 'dark'
 };
 
 export default function Settings({ toggleDark }) {

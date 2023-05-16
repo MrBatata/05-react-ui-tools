@@ -67,7 +67,7 @@ const TaskList = ({ showSettings, setShowSettings }) => {
     <>
 
       <header className="flex justify-between">
-        <h1 className="text-3xl text-sky-700 font-semibold dark:text-sky-300">TASK LIST</h1>
+        <h1 className="text-3xl text-sky-700 font-semibold dark:text-sky-300">Lista de tareas</h1>
         <motion.button
           whileTap={{ scale: 2 }}
           className="btn"

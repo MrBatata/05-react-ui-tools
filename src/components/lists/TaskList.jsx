@@ -38,10 +38,10 @@ const TaskList = ({ showSettings, setShowSettings }) => {
    * @param {*} index - Índice de la tarea a eliminar
    */
 
-  const removeItem = (index) => {
-    const newtasklist = tasklist.filter((t, i) => i !== index);
-    setTasklist(newtasklist);
-  };
+  // const removeItem = (index) => {
+  //   const newtasklist = tasklist.filter((t, i) => i !== index);
+  //   setTasklist(newtasklist);
+  // };
 
   /**
    * Cambia el item por completado <-> pendiente

@@ -16,7 +16,7 @@ const defaultConfig = {
 const App = () => {
   const [dark, setDark] = React.useState(false);
   const [showSettings, setShowSettings] = React.useState(false);
-  const [config, setConfig] = useLocalStorage('config', defaultConfig);
+  const [_, setConfig] = useLocalStorage('config', defaultConfig);
 
   /**
    * Se crea una variable de estado donde se almacena el valor de la configuración en localStorage

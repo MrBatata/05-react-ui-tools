@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { getTasks } from "../../firebase/firestore";
 
 /**
  * Componente que gestiona la lista de tareas
@@ -68,6 +69,7 @@ const TaskList = ({ showSettings, setShowSettings }) => {
 
       <header className="flex justify-between">
         <h1 className="text-3xl text-sky-700 font-semibold dark:text-sky-300">Lista de tareas</h1>
+        <button onClick={getTasks}>Log in console tasks from Firebase</button>
         <motion.button
           whileTap={{ scale: 2 }}
           className="btn"

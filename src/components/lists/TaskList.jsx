@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { getTasks } from "../../firebase/firestore";
+import { addTaskToDB, getTasks, updateTaskInDB, updateTaskInDB2 } from "../../firebase/controller";
 
 /**
  * Componente que gestiona la lista de tareas
@@ -11,14 +11,34 @@ const TaskList = ({ showSettings, setShowSettings }) => {
   const [newTask, setNewTask] = useState("");
   const [tasklist, setTasklist] = useState([]);
 
+  const initializeTasks = () => {
+    getTasks()
+      .then((t) => setTasklist([...t]))
+      .catch((e) => console.error(e))
+  };
+
+  useEffect(() => {
+    console.log('useEffect run...');
+    initializeTasks();
+    // console.log(tasklist);
+  }, [])
+
   /**
    * Añade una nueva tarea a la lista
    * v2: La nueva tarea se añade como un objeto { task: nombre de la tarea, completed: si está completada o no}
    */
   const addNewTask = () => {
-    setTasklist([...tasklist, { task: newTask, completed: false }]);
-    setNewTask("");
-    return true;
+    if (newTask === '') return;
+    // setTasklist([...tasklist, { task: newTask, completed: false }]);
+    addTaskToDB({ description: newTask, isCompleted: false })
+      .then()
+      .catch(e => console.error(e))
+      .finally(() => {
+        setNewTask("")
+        initializeTasks()
+      }
+      );
+
   };
 
   /**
@@ -49,10 +69,14 @@ const TaskList = ({ showSettings, setShowSettings }) => {
    * @param {*} index 
    */
 
-  const toggleCompleteItem = (index) => {
-    let newTaskList = tasklist;
-    newTaskList[index].completed = !newTaskList[index].completed;
-    setTasklist([...newTaskList]);
+  const toggleCompleteItem = (t) => {
+    updateTaskInDB(t)
+      .then()
+      .catch(e => console.error(e))      
+      .finally(() => {
+        initializeTasks()
+      }
+      );
   };
 
   /**
@@ -69,7 +93,6 @@ const TaskList = ({ showSettings, setShowSettings }) => {
 
       <header className="flex justify-between">
         <h1 className="text-3xl text-sky-700 font-semibold dark:text-sky-300">Lista de tareas</h1>
-        <button onClick={getTasks}>Log in console tasks from Firebase</button>
         <motion.button
           whileTap={{ scale: 2 }}
           className="btn"
@@ -97,7 +120,7 @@ const TaskList = ({ showSettings, setShowSettings }) => {
           <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm">Task List is Empty</p>
         ) : (
           <ul>
-            {tasklist.map((item, index) => (
+            {tasklist.map((t, index) => (
               <motion.li
                 initial={{ x: "-100%" }}
                 animate={{ x: "calc(100vw - 100%)" }}
@@ -111,14 +134,14 @@ const TaskList = ({ showSettings, setShowSettings }) => {
 
                     type="checkbox"
                     // onClick={() => removeItem(index)}
-                    onClick={() => toggleCompleteItem(index)}
-                    checked={item.completed}
+                    onClick={() => toggleCompleteItem(t)}
+                    checked={t.isCompleted}
                     onChange={() => { }}
                   />
                   <span
-                    className={`ml-2 text-gray-800 dark:text-gray-100 text-sm italic ${item.completed && "line-through"}`}
+                    className={`ml-2 text-gray-800 dark:text-gray-100 text-sm italic ${t.isCompleted && "line-through"}`}
                   >
-                    {item.task}
+                    {t.description}
                   </span>
                 </label>
               </motion.li>
